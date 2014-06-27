@@ -1,28 +1,32 @@
 Index: src/main/java/org/apache/maven/plugin/deploy/DeployMojo.java
 ===================================================================
---- src/main/java/org/apache/maven/plugin/deploy/DeployMojo.java	(revision 1605932)
+--- src/main/java/org/apache/maven/plugin/deploy/DeployMojo.java	(revision 1606252)
 +++ src/main/java/org/apache/maven/plugin/deploy/DeployMojo.java	(working copy)
-@@ -72,6 +72,11 @@
+@@ -72,6 +72,12 @@
      @Parameter( defaultValue = "${reactorProjects}", required = true, readonly = true )
      private List<MavenProject> reactorProjects;
  
-+	/** A number of ms to sleep before deploying at the end
-+	 */
-+	@Parameter( defaultValue = "0", property = "deployAtEndSleepTime" )
++    /** A number of ms to sleep before deploying at the end 
++    *   (use with deployAtEnd)
++    */
++    @Parameter( defaultValue = "0", property = "deployAtEndSleepTime" )
 +    private long deployAtEndSleepTime;
 +
      /**
       * Whether every project should be deployed during its own deploy-phase or at the end of the multimodule build. If
       * set to {@code true} and the build fails, none of the reactor projects is deployed
-@@ -183,6 +188,11 @@
+@@ -183,6 +189,14 @@
          {
              synchronized ( deployRequests )
              {
-+				try {
-+					Thread.sleep(deployAtEndSleepTime);
-+				}
-+				catch (InterruptedException e) {
-+				}
++                try {
++                    if (deployAtEndSleepTime != 0) {
++                        getLog().info( "Sleeping for " + deployAtEndSleepTime + "ms before deploying");
++                        Thread.sleep(deployAtEndSleepTime);
++                    }
++                }
++                catch (InterruptedException e) {
++                }
                  while( !deployRequests.isEmpty() )
                  {
                      deployProject( deployRequests.remove( 0 ) );
