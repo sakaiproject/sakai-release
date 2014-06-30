@@ -29,6 +29,7 @@ Go to the next step in the process!
 $domaketags = 0;
 $doswitchtags = 0;
 $docommittags = 0;
+$doupdateexternals = 0;
 
 $releasetag = "sakai-10.0"
 $releasejira = "SAK-26575" 
@@ -106,12 +107,17 @@ if ($domaketags == 1) then
 end
 
 if ($doswitchtags == 1) then
+	puts "Switching tags"
 	s.switchtags()
 end
 
 if ($docommittags == 1) then 
+	puts "Committing tags"
 	s.committags()
 end
 
-s.newexternals()
+if ($doupdateexternals == 1) then
+	puts "Updating externals"
+	s.newexternals()
+end
 
