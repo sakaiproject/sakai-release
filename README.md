@@ -121,19 +121,18 @@ Your request will be approved (denied?) and you will be able to publish org.saka
 1. Get a list of all provided dependencies with a plugin and put in a unique lis
 t
 
-  * rm /tmp/dependency-list.txt ; mvn org.apache.maven.plugins:maven-dependency-plugin:2.2:list -Dsort=true -DincludeScope=compile -DappendOutput=true -DoutputFile=/tmp/dependency-list.txt
-  * grep ":provided" /tmp/dependency-list.txt | grep "org\.sakaiproject" | sort | uniq > /tmp/pdeps.txt
-  * grep ":compile" /tmp/dependency-list.txt | grep "org\.sakaiproject" | sort | uniq > /tmp/cdeps.txt
+  * `rm /tmp/dependency-list.txt ; mvn org.apache.maven.plugins:maven-dependency-plugin:2.2:list -Dsort=true -DincludeScope=compile -DappendOutput=true -DoutputFile=/tmp/dependency-list.txt`
+  * `grep ":provided" /tmp/dependency-list.txt | grep "org\.sakaiproject" | sort | uniq > /tmp/pdeps.txt`
+  * `grep ":compile" /tmp/dependency-list.txt | grep "org\.sakaiproject" | sort | uniq > /tmp/cdeps.txt`
   * TODO: Do we have to include cross project compile dependencies? How much to actually release? Do something with cdeps.txt
 
 2. Use this plugin (I couldn't find one) that will list what directory the pom for all artifacts is in. This could be done without a plugin, but seems pretty easy.
-  * mvn org.sakaiproject:sakai-dirlist-plugin:list-dirs > /tmp/artifacts-list.txt
-  * grep ":::" /tmp/artifacts-list.txt | sort | uniq > /tmp/artifacts.txt
+  * `mvn org.sakaiproject:sakai-dirlist-plugin:list-dirs > /tmp/artifacts-list.txt`
+  * `grep ":::" /tmp/artifacts-list.txt | sort | uniq > /tmp/artifacts.txt`
 
 3. Match up list in #1 (pdeps.txt) with list in #2 (artifacts.txt), write as <modules>  </modules> (This script)
   * Run as artparse.rb
   * Put these modules into the base pom.xml
-
 
 *artparse.rb is experimental and might need modifications*
 
@@ -160,10 +159,7 @@ I'm not sure what's causing those bad signatures it would be really nice to know
 http://maven.apache.org/plugins/maven-deploy-plugin/source-repository.html
 - Apply the patch in this directory DeployMojoSleep.patch
 - Compile this plugin with the patch
-- Go to the directory that is failing and run
-```
- mvn install gpg:sign deploy -DdeployAtEnd=true -DdeployAtEndSleepTime=60000 -P sakai-provided
-```
+- Go to the directory that is failing and run `mvn install gpg:sign deploy -DdeployAtEnd=true -DdeployAtEndSleepTime=60000 -P sakai-provided`
 - Note this doesn't have the extra goals on it, just what you need. After it gets all built, open another window and verify that the asc files are signed incorrectly.
 - Run `gpg -ab <filename>` on the incorrect files. It will prompt you to overwrite. Note you have to actually sign the jar, and not the asc that the find command gives you.
 - Ideally this won't be a problem for you or will be figured out and this section can be removed!
