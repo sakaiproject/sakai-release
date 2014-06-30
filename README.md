@@ -78,7 +78,6 @@ relevant xml in pom:
   </build>
 </project>
 ```
-* insert tag script instructions
 
 # Deploy artifacts
 This is typically handled with the deploy plugin
