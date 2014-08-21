@@ -49,8 +49,6 @@ class SakaiTag
 	end
 
 	def newexternals()
-		`svn co --ignore-externals tmpdir`
-
 		File.open(".externals.new","w") { |file|
 			file.puts("# Sakai CLE Externals")
 			file.puts("# Updating: svn propset svn:externals -F .externals .")

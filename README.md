@@ -85,7 +85,7 @@ For this to work you have to be in the directory with .externals and have full c
 ```
 - Checkout the tag locally, no externals
 ```
-  svn co svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-10.0 --ignore-externals
+  svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-10.0 --ignore-externals
 ```
 - Copy the .externals.new that was generated here by doupdateexternals into the .externals
 ```
