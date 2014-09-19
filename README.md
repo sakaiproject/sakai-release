@@ -164,6 +164,8 @@ After you have done this first step, you need to get the repository id and deplo
 
 It should show a bunch of ids, one of them named something like orgsakaiproject-1028 or something. You need that ID for the next command parameter stagingRepositoryId. It's going to run a mvn deploy with the -N option so only the poms are deployed.  
 
+__Note: This script probably needs to do a find for all pom.xml and also do sub directories with nested poms, see SAK-26598, this is close but not perfect__
+
 ```
 provided=( reset-pass announcement assignment basiclti external-calendaring-service calendar common content content-review courier delegatedaccess edu-services emailtemplateservice entitybroker entitybroker hierarchy kernel lessonbuilder login mailarchive mailsender message metaobj msgcntr  polls portal presence profile2 chat citations help dav web podcasts postem rights rwiki syllabus usermembership samigo jobscheduler search search shortenedurl signup site-manage sitestats taggable userauditservice warehouse )
 for i in "${provided[@]}"; do
