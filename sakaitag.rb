@@ -26,13 +26,13 @@ Go to the next step in the process!
 =end
 
 #Flag to make tags or not, only need to run once, for testing
-$domaketags = 0;
-$doswitchtags = 0;
-$docommittags = 0;
-$doupdateexternals = 0;
+$domaketags = 1;
+$doswitchtags = 1;
+$docommittags = 1;
+$doupdateexternals = 1;
 
-$releasetag = "sakai-10.0"
-$releasejira = "SAK-26575" 
+$releasetag = "sakai-10.2"
+$releasejira = "SAK-27958" 
 
 class SakaiTag
 
