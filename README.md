@@ -7,7 +7,7 @@ Releasing sakai involves
 We previously used the maven release plugin, but that generally doesn't work out that great. It does a lot of these steps and would have been nice for sure. A lot of other people aren't fans either. http://axelfontaine.com/blog/final-nail.html
 
 *This guide still is a WIP.*
-Last updated for 10.1 on 08/29/2014, corrections are usually made each release.
+Last updated for 10.2 on 10/13/2014, corrections/updates are usually made each release.
 
 # Versioning the new version
 For this task we will leverage the maven versions plugin http://mojo.codehaus.org/versions-maven-plugin/
@@ -21,29 +21,38 @@ grep -rl "<version>10-SNAPSHOT</version>" --include=*.xml * |wc -l
 539
 ``` 
 
-Then update the version using the appropriate new version, in this case 10.0:
+Then update the version using the appropriate new version, in this case 10.2:
 
 ```
-mvn versions:set -DnewVersion=10.0 -DgenerateBackupPoms=false -f master/pom.xml
+mvn versions:set -DnewVersion=10.2 -DgenerateBackupPoms=false -f master/pom.xml
 ```
 
 *Note currently there are some properties that will need to be updated manually in master/pom.xml currently they are below. The plugin does not update these:*
+*Pay particular attention to the following properties (may not be in order) - RSF may not be at the same version, please see https://github.com/rsf/RSFCheckouts*
+*RSF SNAPSHOT's also need to be updated in master if they exist (RSF is released separately and should be released if updates are made to it).*
 
 ```
+
 <sakai.version>10-SNAPSHOT</sakai.version>
 <sakai.kernel.version>10-SNAPSHOT</sakai.kernel.version>
 <sakai.msgcntr.version>10-SNAPSHOT</sakai.msgcntr.version>
+
+<rsfutil.version>0.8.1-SNAPSHOT</rsfutil.version>
+<sakairsf.components.version>10-SNAPSHOT</sakairsf.components.version>
+<sakairsf.version>10-SNAPSHOT</sakairsf.version>
+
 ```
 
-This will update all the relevant versions of all the sakai modules to the 10.0 version. But to be sure we check there are no SNAPSHOTS. You might just want to look for any SNAPSHOT. 
-*RSF SNAPSHOT's also need to be updated in master if they exist (RSF is released separately and should be released if updates are made to it).*
+This will update all the relevant versions of all the sakai modules to the 10.2 version. But to be sure we check there are no SNAPSHOTS. You might just want to look for any -SNAPSHOT. Some of these are in profiles that are not relevant to the Sakai 10 build. (Like old 2.9 profiles in lessons and lti) 
 
 ```
 grep -rl "10-SNAPSHOT" --include=*.xml * |wc -l
 0
+
+After it says 0, you can move on to the tagging!
 ```
 
-relevant xml in pom:
+Relevant xml in pom for maven versions plugin (Just for reference):
 
 ```
 <project>
@@ -77,35 +86,56 @@ There is ruby script in this project directory (sakaitag.rb) that
 
 This has been tested with ruby 2.0 and 1.9 and requires no gems. It does (at the moment) require some manual configuration to run and doesn't do anything otherwise because I've only ran it once.
 
-You're going to need to have ruby installed and run this script. At the top of the file there are 4 variables that correspond to each phase, set these all to 1 to run them. If they're 0 it won't run that phase. Also define the release tag that will be created and the jira that will be used in the message.
+You're going to need to have ruby installed (either via a package manager or RVM) and run this script. 
 
-For this to work you have to be in the directory with .externals and have full commit access. After all of these steps are run successfully, there's a few more easy manual steps that need to be done that might be automated later.
+At the top of the file there are 4 variables that correspond to each phase, set these all to 1 to run them. Also define the release tag that will be created and the jira that will be used in the message.
 
-*Note this script can be run by setting 1 in each phase in order, domaketags, doswitchtags, docommittags, doupdateexternals*. TODO: This script should take all of this as command line options rather than having to edit the file. 
+If they're set to 0 it won't run that phase so you can set each to 1 and run it four times in order. (TODO: Make it accept command line arguments) 
 
-Afer this is all done, there's a few more things left to do
-*Note these examples use the tag sakai-10.0, replace this with the new version you're creating*
+*Note this script can be run by setting 1 in each phase in order, domaketags, doswitchtags, docommittags, doupdateexternals*.
+
+For this to work you have to be in the directory with .externals and have svn full commit access. So for instance I go edit this script, set all variables to 1, fill in the tag and SAK and in my 10.x source directory run. 
+```
+ruby ~/sakai-release/sakaitag.tb
+```
+
+It's going to have a huge wall of text where it creates tags, then a lot of processing where it switches tags, and well the rest of the process. There shouldn't be any errors on any of the phases and has been pretty reliable. Afer this is all done, there's a few more things left to do that would be nice to automate later.
+
+*Note these examples use the tag sakai-10.2, replace this with the new version you're creating*
 
 - Copy the main sakai branch into a tag
 ```
-  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-10.0
+  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-10.2.
 ```
 - Checkout the tag locally, no externals
 ```
-  svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-10.0 --ignore-externals
+  svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-10.2 --ignore-externals
 ```
-- Copy the .externals.new that was generated here by doupdateexternals into the .externals
+- Copy the .externals.new that was generated in this directory by the doupdateexternals step into the .externals
 ```
-  cp .externals.new sakai-10.0/.externals
+  cp .externals.new sakai-10.2/.externals
 ```
 - Do into the directory, set the property on the externals and commit it
 ```
-  cd sakai-10.0
+  cd sakai-10.2
   svn propset svn:externals -F .externals .
   svn commit --depth empty . .externals 
 ```
-
-**Important note!** When you do this the deploy project still has SNAPSHOTS, you need to fix these to match the released version (Fix this step?)
+* Run an svn up now to get the new externals and also build the 10.2 master so it's available
+```
+  svn up
+  cd master
+  mvn clean install
+  cd ..
+```
+* Now the deploy project still has the wrong version (SNAPSHOT) and needs a version set run on it. Remember this newVersion still has to match. If you build the master above, update-parent should set the correct version, verify that it is 10.2 and not the previous version.
+```
+  cd deploy
+  mvn versions:update-parent -DparentVersion=10.2 -DgenerateBackupPoms=false
+  mvn versions:set -DnewVersion=10.2 -DgenerateBackupPoms=false
+  svn commit
+  cd ..
+```
 
 # Deploy artifacts and binaries
 Recently there have been discussions that sakai should only release api's to maven repositories, with the regular pack-demo,pack-bin to the source.sakaiproject.org.
@@ -156,7 +186,7 @@ These artifacts need to be deployed to source.sakaiproject.org. There is a speci
 
 After this is done you can release the apis. The command below (If your settings.xml is setup correctly and you have the ability to release to sonatype) should deploy to sonatype. Note the plugin doesn't close by or drop if there is a failure.
 
-`mvn deploy -Psakai-release,sakai-provided -Ddescription="Sakai 10.1 release"`
+`mvn deploy -Psakai-release,sakai-provided -Ddescription="Sakai 10.2 release"`
 
 After you have done this first step, you need to get the repository id and deploy the parent poms. You can get the id by running the command.
 
@@ -164,16 +194,20 @@ After you have done this first step, you need to get the repository id and deplo
 
 It should show a bunch of ids, one of them named something like orgsakaiproject-1028 or something. You need that ID for the next command parameter stagingRepositoryId. It's going to run a mvn deploy with the -N option so only the poms are deployed.  
 
-__Note: This script probably needs to do a find for all pom.xml and also do sub directories with nested poms, see SAK-26598, this is close but not perfect__
+__Note: This script probably probably needs to release almost every pom.xml in Sakai, see SAK-26598, it loops through the projects listed in provided, then loops again through all of it's poms. This will take awhile.__
 
 ```
 provided=( reset-pass announcement assignment basiclti external-calendaring-service calendar common content content-review courier delegatedaccess edu-services emailtemplateservice entitybroker entitybroker hierarchy kernel lessonbuilder login mailarchive mailsender message metaobj msgcntr  polls portal presence profile2 chat citations help dav web podcasts postem rights rwiki syllabus usermembership samigo jobscheduler search search shortenedurl signup site-manage sitestats taggable userauditservice warehouse )
 for i in "${provided[@]}"; do
-  cd $i ; mvn deploy -N -Psakai-release,sakai-provided -Ddescription="Sakai 10.1 release" -DstagingRepositoryId=orgsakaiproject-1028; cd ..
+  pomdirs=`find "$i" -name "pom.xml" -printf "%h;" | grep -v "/target/"`
+  pomdirs=(${pomdirs//;/ })
+  for j in "${pomdirs[@]}"; do
+    pushd .; cd $j ;mvn deploy -N -Psakai-release -Dmaven.test.skip=true -Ddescription="Sakai 10.2 release" -DstagingRepositoryId=orgsakaiproject-1029; popd 
+  done
 done
 ```
 
-These have only been run once, so hopefully they work for you. Will update this next release cycle!
+These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
 ## Some additional information
 
