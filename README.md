@@ -207,6 +207,12 @@ for i in "${provided[@]}"; do
 done
 ```
 
+Finally you should upload all of the artifacts.
+You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
+
+cd pack
+`find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/10.2/artifacts`
+
 These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
 ## Some additional information
