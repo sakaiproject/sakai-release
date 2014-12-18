@@ -7,7 +7,19 @@ Releasing sakai involves
 We previously used the maven release plugin, but that generally doesn't work out that great. It does a lot of these steps and would have been nice for sure. A lot of other people aren't fans either. http://axelfontaine.com/blog/final-nail.html
 
 *This guide still is a WIP.*
-Last updated for 10.2 on 10/13/2014, corrections/updates are usually made each release.
+Last updated for 10.3 on 12/18/2014, corrections/updates/improvments are usually made each release.
+# Set the envorinment version for the version
+Since this is used many times in this document, just set this variable now!
+````
+export SAKAI_RELEASE="10.3"
+```
+
+# Checkout the version to release
+The first step is to check out the branch of Sakai you plan to release and work with. For instance this guide is based of 10.x releases. This will need to be on a system you already have some access to the version control system or plan to establish access
+
+```
+svn co https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/
+```
 
 # Versioning the new version
 For this task we will leverage the maven versions plugin http://mojo.codehaus.org/versions-maven-plugin/
@@ -21,10 +33,10 @@ grep -rl "<version>10-SNAPSHOT</version>" --include=*.xml * |wc -l
 539
 ``` 
 
-Then update the version using the appropriate new version, in this case 10.2:
+Then update the version using the appropriate new version.
 
 ```
-mvn versions:set -DnewVersion=10.2 -DgenerateBackupPoms=false -f master/pom.xml
+mvn versions:set -DnewVersion=${SAKAI_RELEASE} -DgenerateBackupPoms=false -f master/pom.xml
 ```
 
 *Note currently there are some properties that will need to be updated manually in master/pom.xml currently they are below. The plugin does not update these:*
@@ -43,7 +55,7 @@ mvn versions:set -DnewVersion=10.2 -DgenerateBackupPoms=false -f master/pom.xml
 
 ```
 
-This will update all the relevant versions of all the sakai modules to the 10.2 version. But to be sure we check there are no SNAPSHOTS. You might just want to look for any -SNAPSHOT. Some of these are in profiles that are not relevant to the Sakai 10 build. (Like old 2.9 profiles in lessons and lti) 
+This will update all the relevant versions of all the sakai modules to the correct version. But to be sure we check there are no SNAPSHOTS. You might just want to look for any -SNAPSHOT. Some of these are in profiles that are not relevant to the Sakai 10 build. (Like old 2.9 profiles in lessons and lti) 
 
 ```
 grep -rl "10-SNAPSHOT" --include=*.xml * |wc -l
@@ -101,38 +113,38 @@ ruby ~/sakai-release/sakaitag.tb
 
 It's going to have a huge wall of text where it creates tags, then a lot of processing where it switches tags, and well the rest of the process. There shouldn't be any errors on any of the phases and has been pretty reliable. Afer this is all done, there's a few more things left to do that would be nice to automate later.
 
-*Note these examples use the tag sakai-10.2, replace this with the new version you're creating*
+*Note these examples use the environment variable so they should work if this is enter correctly above*
 
 - Copy the main sakai branch into a tag
 ```
-  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-10.2.
+  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-${SAKAI_RELEASE}.
 ```
 - Checkout the tag locally, no externals
 ```
-  svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-10.2 --ignore-externals
+  svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-${SAKAI_RELEASE} --ignore-externals
 ```
 - Copy the .externals.new that was generated in this directory by the doupdateexternals step into the .externals
 ```
-  cp .externals.new sakai-10.2/.externals
+  cp .externals.new sakai-${SAKAI_RELEASE}/.externals
 ```
 - Do into the directory, set the property on the externals and commit it
 ```
-  cd sakai-10.2
+  cd sakai-${SAKAI_RELEASE}
   svn propset svn:externals -F .externals .
   svn commit --depth empty . .externals 
 ```
-* Run an svn up now to get the new externals and also build the 10.2 master so it's available
+* Run an svn up now to get the new externals and also build the SAKAI_RELEASE master so it's available
 ```
   svn up
   cd master
   mvn clean install
   cd ..
 ```
-* Now the deploy project still has the wrong version (SNAPSHOT) and needs a version set run on it. Remember this newVersion still has to match. If you build the master above, update-parent should set the correct version, verify that it is 10.2 and not the previous version.
+* Now the deploy project still has the wrong version (SNAPSHOT) and needs a version set run on it. Remember this newVersion still has to match. If you build the master above, update-parent should set the correct version, verify that it is whatever version you set as SAKAI_RELEASE and not the previous version.
 ```
   cd deploy
-  mvn versions:update-parent -DparentVersion=10.2 -DgenerateBackupPoms=false
-  mvn versions:set -DnewVersion=10.2 -DgenerateBackupPoms=false
+  mvn versions:update-parent -DparentVersion=${SAKAI_RELEASE} -DgenerateBackupPoms=false
+  mvn versions:set -DnewVersion=${SAKAI_RELEASE} -DgenerateBackupPoms=false
   svn commit
   cd ..
 ```
@@ -186,7 +198,7 @@ These artifacts need to be deployed to source.sakaiproject.org. There is a speci
 
 After this is done you can release the apis. The command below (If your settings.xml is setup correctly and you have the ability to release to sonatype) should deploy to sonatype. Note the plugin doesn't close by or drop if there is a failure.
 
-`mvn deploy -Psakai-release,sakai-provided -Ddescription="Sakai 10.2 release"`
+`mvn deploy -Psakai-release,sakai-provided -Ddescription="Sakai ${SAKAI_RELEASE} release"`
 
 After you have done this first step, you need to get the repository id and deploy the parent poms. You can get the id by running the command.
 
@@ -202,7 +214,7 @@ for i in "${provided[@]}"; do
   pomdirs=`find "$i" -name "pom.xml" -printf "%h;" | grep -v "/target/"`
   pomdirs=(${pomdirs//;/ })
   for j in "${pomdirs[@]}"; do
-    pushd .; cd $j ;mvn deploy -N -Psakai-release -Dmaven.test.skip=true -Ddescription="Sakai 10.2 release" -DstagingRepositoryId=orgsakaiproject-1029; popd 
+    pushd .; cd $j ;mvn deploy -N -Psakai-release -Dmaven.test.skip=true -Ddescription="Sakai ${SAKAI_RELEASE} release" -DstagingRepositoryId=orgsakaiproject-1029; popd 
   done
 done
 ```
@@ -211,7 +223,7 @@ Finally you should upload all of the artifacts.
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
 
 cd pack
-`find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/10.2/artifacts`
+`find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts`
 
 These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
