@@ -15,7 +15,7 @@ export SAKAI_RELEASE="10.3"
 ```
 
 # Checkout the version to release
-The first step is to check out the branch of Sakai you plan to release and work with. For instance this guide is based of 10.x releases. This will need to be on a system you already have some access to the version control system or plan to establish access
+The first step is to check out the branch of Sakai you plan to release and work with. For instance this guide is based of 10.x releases. This will need to be on a system you already have some access to the version control system or plan to establish access. I put this in a directory like "source" or "release"
 
 ```
 svn co https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/
@@ -96,7 +96,8 @@ There is ruby script in this project directory (sakaitag.rb) that
 4. Commit to the tag the changes for the versions (docommittags)
 5. Commit the new .externals (doupdateexternals)
 
-This has been tested with ruby 2.0 and 1.9 and requires no gems. It does (at the moment) require some manual configuration to run and doesn't do anything otherwise because I've only ran it once.
+This has been tested with ruby 2.0 and 1.9 and requires no gems. It does (at the moment) require some manual configuration to run and doesn't do anything otherwise because I've only ran it a few times. 
+TODO: Make this script run with command line options so we don't have to change the source.
 
 You're going to need to have ruby installed (either via a package manager or RVM) and run this script. 
 
@@ -117,21 +118,22 @@ It's going to have a huge wall of text where it creates tags, then a lot of proc
 
 - Copy the main sakai branch into a tag
 ```
-  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-${SAKAI_RELEASE}.
+  svn cp https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/ https://source.sakaiproject.org/svn/sakai/tags/sakai-${SAKAI_RELEASE} -m "Creating tag for Sakai ${SAKAI_RELEASE}"
 ```
 - Checkout the tag locally, no externals
 ```
+  cd ..
   svn co https://source.sakaiproject.org/svn/sakai/tags/sakai-${SAKAI_RELEASE} --ignore-externals
 ```
 - Copy the .externals.new that was generated in this directory by the doupdateexternals step into the .externals
 ```
-  cp .externals.new sakai-${SAKAI_RELEASE}/.externals
+  cp sakai-10.x/.externals.new sakai-${SAKAI_RELEASE}/.externals
 ```
 - Do into the directory, set the property on the externals and commit it
 ```
   cd sakai-${SAKAI_RELEASE}
   svn propset svn:externals -F .externals .
-  svn commit --depth empty . .externals 
+  svn commit --depth empty . .externals -m "Comming new externals for Sakai ${SAKAI_RELEASE}" 
 ```
 * Run an svn up now to get the new externals and also build the SAKAI_RELEASE master so it's available
 ```
@@ -145,7 +147,7 @@ It's going to have a huge wall of text where it creates tags, then a lot of proc
   cd deploy
   mvn versions:update-parent -DparentVersion=${SAKAI_RELEASE} -DgenerateBackupPoms=false
   mvn versions:set -DnewVersion=${SAKAI_RELEASE} -DgenerateBackupPoms=false
-  svn commit
+  svn commit -m "Commtting deploy for ${SAKAI_RELEASE}"
   cd ..
 ```
 
@@ -189,9 +191,9 @@ t
 
 ## Deploying artifacts from this profile (You do need to do this)
 
-This is typically handled with the deploy plugin. This process changed by sonatype in the 10.1 release with the sonatype nexus plugin. (https://github.com/sonatype/nexus-maven-plugins/tree/master/staging/maven-plugin)
+This is typically handled with the deploy plugin. This process changed by sonatype in the 10.? release with the sonatype nexus plugin. (https://github.com/sonatype/nexus-maven-plugins/tree/master/staging/maven-plugin)
 
-Go into the top level of your 10.1 directory and first make the pack
+Go into the top level of your 10.? directory and first make the pack
 mvn clean install -P pack
 
 These artifacts need to be deployed to source.sakaiproject.org. There is a special user name and password assigned to us by Wush to access this location and you're on your own to figure out the details.
