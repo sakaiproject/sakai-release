@@ -3,6 +3,7 @@ Releasing sakai involves
 1. Changing versions 
 2. Creating tags 
 3. Deploying artifacts to maven repo's.
+4. Updating the release documents and sending out announcements (This is not included here)
 
 We previously used the maven release plugin, but that generally doesn't work out that great. It does a lot of these steps and would have been nice for sure. A lot of other people aren't fans either. http://axelfontaine.com/blog/final-nail.html
 
@@ -61,6 +62,9 @@ The first step is to check out the branch of Sakai you plan to release and work 
 ```
 svn co https://source.sakaiproject.org/svn/sakai/branches/sakai-10.x/
 ```
+
+## Setup a JIRA used to track this
+I usually setup a task with the component "Release Management" to track all the work on this.
 
 # Versioning the new version
 For this task we will leverage the maven versions plugin http://mojo.codehaus.org/versions-maven-plugin/
@@ -258,10 +262,20 @@ for i in "${provided[@]}"; do
 done
 ```
 
-Finally you should upload all of the artifacts.
+Finally you should generate the javadocs upload all of the artifacts.
+
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
 
-`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts`
+`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts; cd ..`
+
+Finally run this in the top level directory to generate and aggregate the java docs
+
+`mvn javadoc:aggregate`
+And then upload them to the release directory (Make sure it's empty)
+
+`rsync -r target/site/apidocs sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/`
+
+* And that should be it! Close the Jira, check the release page for working links and send out the release notes! *
 
 These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
