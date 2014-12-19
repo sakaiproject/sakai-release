@@ -208,7 +208,7 @@ After you have done this first step, you need to get the repository id and deplo
 
 It should show a bunch of ids, one of them will come up as 
 
-`[INFO] orgsakaiproject-1034 OPEN     org.sakaiproject:master:10.3`
+*[INFO] orgsakaiproject-1034 OPEN     org.sakaiproject:master:10.3*
 
 You need that ID for the next command parameter stagingRepositoryId. 
 
