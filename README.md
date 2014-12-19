@@ -8,13 +8,54 @@ We previously used the maven release plugin, but that generally doesn't work out
 
 *This guide still is a WIP.*
 Last updated for 10.3 on 12/18/2014, corrections/updates/improvments are usually made each release.
-# Set the envorinment version for the version
+
+# One time Pre-setup : You need to do these steps but just once
+
+There are a few steps that need to be done prior to ever doing a release on a new machine such as establishing the credentials and setting up some config files, this is where that information is.
+
+## Credentials for deployment (Only need to do this once)
+All artifacts are uploaded and released from Sonatype. You need an account and gpg key in sonatype. Make sure that these the passwords for these are properly configured in ~/.m2/settings.xml. Read the guide below
+ 
+* https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
+
+The actual process is under "Signup" and it involves signing up for a Jira account and adding a comment to the Sakai CLE project. https://issues.sonatype.org/browse/OSSRH-2835
+
+Your request will be approved (denied?) and you will be able to publish org.sakaiproject artifacts.
+
+*TODO: Expand on this section as I didn't have to get these credentials*
+
+## Generate GPG Key
+
+You'll basically need to install and use gpg and follow the [guide on this page](http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven/). For most headless systems you'll also need to install rng-tools if not already installed (on Ubuntu it was just sudo apt-get install rng-tools) to make sure you have enough entropy. Just leave all of the values as the defaults as the page says, and publish your key to the key server.   
+
+## You need JDK and Maven
+
+It mostly goes without saying but you need to have a JDK and version of Maven in the path. Install these and make sure you can run a regular build before trying to deploy.
+
+## Add SSH repository to .ssh/config
+
+I have a server entry called "sakaistatic" below where the artifacts are stored. This is on Wush and you'll need credentials to write to that. We may be switching this over to S3 in the near future. In my ~/.ssh/config file it looks like below. You need the appropriate user and a password or the IdentityFile defined to login.
+```
+Host sakaistatic
+	User <username>
+	Hostname sakai-static.wnmh.net
+	IdentityFile <path to private key>
+```
+
+It's useful if you set this IdentityFile up in keychain (Or just directly in ssh-agent) so you don't have to type it over and over. 
+`sudo apt-get install keychain` then `keychain ~/.ssh/id_rsa.work` (If that's the name of your private key)
+
+# Every time Pre-setup : You need to do this before starting each release
+
+Before starting every release, you need to get the source ready and updated and set a few environment variables that are used in this document
+
+## Set the envorinment version for the version
 Since this is used many times in this document, just set this variable now!
 ````
 export SAKAI_RELEASE="10.3"
 ```
 
-# Checkout the version to release
+## Checkout the version to release
 The first step is to check out the branch of Sakai you plan to release and work with. For instance this guide is based of 10.x releases. This will need to be on a system you already have some access to the version control system or plan to establish access. I put this in a directory like "source" or "release"
 
 ```
@@ -158,17 +199,6 @@ They are possibly a few ways to handle this but we could configure the deploy pl
 
 Profiles were added to the main build pom.
 
-## Pre-setup : Credentials for deployment (Only need to do this once)
-All artifacts are uploaded and released from Sonatype. You need an account and gpg key in sonatype. Make sure that these the passwords for these are properly configured in ~/.m2/settings.xml. Read the guide below
- 
-* https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide
-
-The actual process is under "Signup" and it involves signing up for a Jira account and adding a comment to the Sakai CLE project. https://issues.sonatype.org/browse/OSSRH-2835
-
-Your request will be approved (denied?) and you will be able to publish org.sakaiproject artifacts.
-
-*TODO: Expand on this section as I didn't have to get these credentials*
-
 ## Creating profiles for a build (Only need to do this once per release cycle, already done for 10)
 
 1. Get a list of all provided dependencies with a plugin and put in a unique lis
@@ -231,8 +261,7 @@ done
 Finally you should upload all of the artifacts.
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
 
-cd pack
-`find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts`
+`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts`
 
 These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
