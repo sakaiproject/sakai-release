@@ -206,8 +206,15 @@ After you have done this first step, you need to get the repository id and deplo
 
 `mvn nexus-staging:rc-list -Psakai-release`
 
-It should show a bunch of ids, one of them named something like orgsakaiproject-1028 or something. You need that ID for the next command parameter stagingRepositoryId. It's going to run a mvn deploy with the -N option so only the poms are deployed.  
+It should show a bunch of ids, one of them will come up as 
 
+`[INFO] orgsakaiproject-1034 OPEN     org.sakaiproject:master:10.3`
+
+You need that ID for the next command parameter stagingRepositoryId. 
+
+`export STAGING_ID="orgsakaiproject-1034"`
+
+It's going to run a mvn deploy with the -N option so only the poms are deployed.  
 __Note: This script probably probably needs to release almost every pom.xml in Sakai, see SAK-26598, it loops through the projects listed in provided, then loops again through all of it's poms. This will take awhile.__
 
 ```
@@ -216,7 +223,7 @@ for i in "${provided[@]}"; do
   pomdirs=`find "$i" -name "pom.xml" -printf "%h;" | grep -v "/target/"`
   pomdirs=(${pomdirs//;/ })
   for j in "${pomdirs[@]}"; do
-    pushd .; cd $j ;mvn deploy -N -Psakai-release -Dmaven.test.skip=true -Ddescription="Sakai ${SAKAI_RELEASE} release" -DstagingRepositoryId=orgsakaiproject-1029; popd 
+    pushd .; cd $j ;mvn deploy -N -Psakai-release -Dmaven.test.skip=true -Ddescription="Sakai ${SAKAI_RELEASE} release" -DstagingRepositoryId=${STAGING_ID}; popd 
   done
 done
 ```
