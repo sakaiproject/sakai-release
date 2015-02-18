@@ -227,6 +227,8 @@ t
 
 This is typically handled with the deploy plugin. This process changed by sonatype in the 10.? release with the sonatype nexus plugin. (https://github.com/sonatype/nexus-maven-plugins/tree/master/staging/maven-plugin)
 
+** Before deploying I'd run an `svn status` to see if there are any files that you missed committing. Often I've forgotten to commit the base pom.xml. **
+
 Go into the top level of your 10.? directory and first make the pack
 `mvn clean install -P pack`
 
@@ -262,7 +264,7 @@ for i in "${provided[@]}"; do
 done
 ```
 
-Finally you should generate the javadocs upload all of the artifacts.
+Afterward you should generate the javadocs upload all of the artifacts.
 
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
 
@@ -274,6 +276,7 @@ Finally run this in the top level directory to generate and aggregate the java d
 And then upload them to the release directory (Make sure it's empty)
 
 `rsync -r target/site/apidocs sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/`
+
 
 * And that should be it! Close the Jira, check the release page for working links and send out the release notes! *
 
