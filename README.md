@@ -264,6 +264,10 @@ for i in "${provided[@]}"; do
 done
 ```
 
+After this step you need to close, verify and release all of these artifacts. I usually do this through the UI on https://oss.sonatype.org but it's probably also possible with the maven plugin.
+
+## Deploying binaries and javadocs
+
 Afterward you should generate the javadocs upload all of the artifacts.
 
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
