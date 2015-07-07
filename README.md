@@ -273,6 +273,11 @@ Afterward you should generate the javadocs upload all of the artifacts.
 
 You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
 
+Because this hits the server multiple times you might also want to use an app like keychain or ssh-agent.
+
+First make the directory you'll need
+`ssh sakaistatic 'mkdir -p /home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts'` 
+
 `cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts; cd ..`
 
 Finally run this in the top level directory to generate and aggregate the java docs
