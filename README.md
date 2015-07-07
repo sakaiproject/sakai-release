@@ -227,7 +227,7 @@ t
 
 This is typically handled with the deploy plugin. This process changed by sonatype in the 10.? release with the sonatype nexus plugin. (https://github.com/sonatype/nexus-maven-plugins/tree/master/staging/maven-plugin)
 
-** Before deploying I'd run an `svn status` to see if there are any files that you missed committing. Often I've forgotten to commit the base pom.xml. **
+** Before deploying I'd run an `svn ci` and an `svn status` to see if there are any files that you missed committing. Often I've forgotten to commit the base pom.xml. **
 
 Go into the top level of your 10.? directory and first make the pack
 `mvn clean install -P pack`
