@@ -23,7 +23,7 @@
 
 <p>Etherpad notes:</p>
 
-<p>&nbsp;&nbsp; http://etherpad.ctools.org/rmmt-tuesday </p>
+<p>&nbsp;&nbsp; http://etherpad.ctools.org/rmmt-$tuesday </p>
 
 
 EOF;
