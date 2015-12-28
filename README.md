@@ -279,18 +279,18 @@ Because this hits the server multiple times you might also want to use an app li
 
 First make the directory you'll need
 
-`ssh sakaistatic "mkdir -p /home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts"` 
+`ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_RELEASE}/artifacts"` 
 
 Then you can copy the files over
 
-`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/artifacts; cd ..`
+`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:~/public_html/release/${SAKAI_RELEASE}/artifacts; cd ..`
 
 Finally run this in the top level directory to generate and aggregate the java docs
 
 `mvn javadoc:aggregate`
 And then upload them to the release directory (Make sure it's empty)
 
-`rsync -r target/site/apidocs sakaistatic:/home/sakai/public_html/release/${SAKAI_RELEASE}/`
+`rsync -r target/site/apidocs sakaistatic:~/public_html/release/${SAKAI_RELEASE}/`
 
 
 * And that should be it! Close the Jira, check the release page for working links and send out the release notes! *
