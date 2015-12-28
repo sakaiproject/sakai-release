@@ -196,6 +196,8 @@ It's going to have a huge wall of text where it creates tags, then a lot of proc
   cd ..
 ```
 
+* You might get an error above if you don't have master 10.x built recently, you should do that from the SNAPSHOT.
+
 # Deploy artifacts and binaries
 Recently there have been discussions that sakai should only release api's to maven repositories, with the regular pack-demo,pack-bin to the source.sakaiproject.org.
 
