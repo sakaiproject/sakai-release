@@ -154,10 +154,10 @@ If they're set to 0 it won't run that phase so you can set each to 1 and run it 
 
 For this to work you have to be in the directory with .externals and have svn full commit access. So for instance I go edit this script, set all variables to 1, fill in the tag and SAK and in my 10.x source directory run. 
 ```
-ruby ~/sakai-release/sakaitag.tb
+ruby ~/sakai-release/sakaitag.rb
 ```
 
-It's going to have a huge wall of text where it creates tags, then a lot of processing where it switches tags, and well the rest of the process. There shouldn't be any errors on any of the phases and has been pretty reliable. Afer this is all done, there's a few more things left to do that would be nice to automate later.
+It's going to have a huge wall of text where it creates tags, then a lot of processing where it switches tags, and it may ask you for your SVN credentials. There shouldn't be any errors on any of the phases and has been pretty reliable. Afer this is all done, there's a few more things left to do that would be nice to automate later.
 
 *Note these examples use the environment variable so they should work if this is enter correctly above*
 
