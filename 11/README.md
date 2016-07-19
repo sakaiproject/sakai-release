@@ -13,7 +13,7 @@ git pull upstream master (ensure your master working copy is updated)
 git co 11.x
 git pull upstream 11.x (ensure your 11.x working copy is updated)
 ```
-(Those steps are equivalent to chcherrypick.sh -u)
+(Those steps are equivalent to get-cherry-picks.sh -u)
 
 `git cherry 11.x master -v | grep SAK-31389`
 
