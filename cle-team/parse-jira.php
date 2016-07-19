@@ -2,9 +2,10 @@
   $year = (int) date('Y');
   $month = (int) date('m');
   $day = (int) date('d');
-  $thursday = date('Y-m-d', time() + 86400);
+  // assumption is that this script is running on a Monday
+  // therefore Tuesday, our meeting date is 86400 seconds later
+  $tuesday = date('Y-m-d', time() + 86400);
 
-  $thanksgiving = date('Y-m-d', strtotime("fourth thursday of Nov $year"));
   $julyfour = "$year-07-04";
 
   $zone = date('T');
@@ -14,8 +15,7 @@
   }
 
   $to = 'sakai-core@apereo.org';
-  $subject = 'Sakai Core Team Call, Thursday, ' . $thursday . ', 10:00' . $zone . ' (' . $gmt . ')';
-
+  $subject = 'Sakai Core Team Call, Tuesday, ' . $tuesday . ', 10:00' . $zone . ' (' . $gmt . ')';
   $output = <<<EOF
 <p>Quick PIN: 8600146</p>
 
@@ -23,12 +23,12 @@
 
 <p>Etherpad notes:</p>
 
-<p>&nbsp;&nbsp; http://etherpad.ctools.org/rmmt-$thursday </p>
+<p>&nbsp;&nbsp; http://etherpad.ctools.org/rmmt-$tuesday </p>
 
 
 EOF;
 
-  if ($thursday == $thanksgiving || $thursday == $julyfour || ($month == 12 && $day > 22)) {
+  if ($tuesday == $julyfour || ($month == 12 && $day > 22)) {
     $output = "<p><strong>There will be no call this week because of holidays.</strong></p>";
     $subject = 'No Sakai Core Team call this week';
   }
@@ -104,8 +104,7 @@ EOF;
 
 
   // mail it
-#  $headers = "From: sakai-core@apereo.org\r\n";
-  $headers = "From: matthew@longsight.com\r\n";
+  $headers = "From: sakaicoordinator@apereo.org\r\n";
   $headers .= "Reply-To: sakai-core@apereo.org\r\n";
   $headers .= "CC: sakai-qa@apereo.org,sakai-dev@apereo.org\r\n";
   $headers .= "MIME-Version: 1.0\r\n";
