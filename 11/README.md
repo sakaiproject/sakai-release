@@ -26,3 +26,10 @@ The + sign means that this commit is missing in 11.x branch.
 Then you can type:
 
 `git cherry-pick 0188650616ba` (You don’t need to use the complete hash string just the enough characters to identify the commit)
+
+If you are not sure is really easy to get back, just type:
+
+```
+git cherry-pick --abort (If the cherry-pick does not finish successfully)
+git reset --hard HEAD~1 (If the cherry-pick finish but you are not happy with the result, for example the build fails)
+```
