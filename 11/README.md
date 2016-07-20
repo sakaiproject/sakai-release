@@ -33,3 +33,10 @@ If you are not sure is really easy to get back, just type:
 git cherry-pick --abort (If the cherry-pick does not finish successfully)
 git reset --hard HEAD~1 (If the cherry-pick finish but you are not happy with the result, for example the build fails)
 ```
+
+# Cherry Pick Script
+
+Install by typing: `npm install -g`
+For help type: `cherrypicks --help`
+
+
