@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var program = require('commander');
 var exec = require('child_process').exec;
+var chalk = require('chalk');
 
 var processLines = function(stdout,filter) {
 	var outLines = stdout.split(/\r?\n/);
@@ -42,10 +43,11 @@ var processOptions = function(updated) {
 					&& t.indexOf('DASH-') < 0
 					&& t.indexOf('RSF-') < 0
 					&& t.indexOf('Sak-') < 0
+					&& !t.match('.*#[0-9]+.*')
 			});
 			console.log('Found '+flines.length+' missed commits.');
 			for (var i=0; i<flines.length; i++) {
-				console.log(flines[i].substring(2));
+				console.log(chalk.cyan(flines[i].substring(2)));
 			}
 		});
 	}
