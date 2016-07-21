@@ -8,18 +8,18 @@ Sakai 11 scripts (forthcoming)
 When working on the actual source (not a fork)
 
 ```
-git co master
+git checkout master
 git pull upstream master (ensure your master working copy is updated)
-git co 11.x
+git checkout 11.x
 git pull upstream 11.x (ensure your 11.x working copy is updated)
 ```
-(Those steps are equivalent to get-cherry-picks.sh -u)
+(Those steps are equivalent to `cherrypicks -u`)
 
 `git cherry 11.x master -v | grep SAK-31389`
 
 This will return something like:
 
-+ 0188650616ba6690e319db3c745345c7a3511252 SAK-31389 Cleanup buttonBar macro. (#2964)
+\+ 0188650616ba6690e319db3c745345c7a3511252 SAK-31389 Cleanup buttonBar macro. (#2964)
 
 The + sign means that this commit is missing in 11.x branch.
 
@@ -36,7 +36,27 @@ git reset --hard HEAD~1 (If the cherry-pick finish but you are not happy with th
 
 # Cherry Pick Script
 
-Install by typing: `npm install -g`
-For help type: `cherrypicks --help`
+Use the new node script to manage cherry picking in Sakai, you must install node before run it !
 
+Clone this repo and type: `npm install -g`
+
+Now you have the new _cherrypicks_ command in your system.
+
+## list of commands
+
+- Get the script help `cherrypicks -h`
+
+## Common work
+
+- Get the list of all jira's ready to cherry pick (with commands) `cherrypicks -j -p`
+
+	- You can control what is checked in jira, default verified:merge (status=verified and 11 status=merge)
+
+- Find a concrete jira/text in commit to cherry pick it `cherrypicks -c SAK-YYYY -p`
+
+- Find if some jira/commit is already in 11.x branch `cherrypicks -f SAK-YYYY`
+
+- Find missing github issue commits `cherrypicks -g -p`
+
+- Find missing commits not related with jira or github `cherrypicks -m`
 
