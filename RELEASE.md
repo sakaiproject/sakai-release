@@ -1,6 +1,11 @@
 Work in Progress for doing the 11 release
 ```
+# Change this each release
 export SAKAI_VERSION=11.0
+
+#This should be static
+export SAKAI_SNAPSHOT_VERSION=11-SNAPSHOT
+
 git clone git@github.com:sakaiproject/sakai.git
 # Or  git pull --rebase  if you're in an already existing directory
 git fetch
@@ -10,7 +15,7 @@ git checkout 11.x
 
 cd master
 #Fix the SNAPSHOT's in the properties first
-sed -i -e "s/11-SNAPSHOT/${SAKAI_VERSION}/" pom.xml
+sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 cd ..
 
@@ -18,5 +23,11 @@ mvn clean install -P pack-bin -Dmaven.test.skip=true
 
 mvn deploy -Dmaven.test.skip=true
 
+git commit -a -m "Releasing Sakai ${SAKAI_VERSION}"
 mvn -Dtag="${SAKAI_VERSION}" scm:tag
+cd master
+mvn versions:set -DnewVersion=${SAKAI_SNAPSHOT_VERSION} -DgenerateBackupPoms=false
+git commit -a -m "Switching Sakai back to ${SAKAI_SNAPSHOT_VERSION}"
+
+
 ```
