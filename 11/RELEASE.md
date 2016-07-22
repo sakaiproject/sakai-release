@@ -30,7 +30,7 @@ mvn versions:set -DnewVersion=${SAKAI_SNAPSHOT_VERSION} -DgenerateBackupPoms=fal
 git commit -a -m "Switching Sakai back to ${SAKAI_SNAPSHOT_VERSION}"
 ```
 
-Now if everythings okay (examine the git log, check sonatype), push it!
+Now if everythings okay (examine the git log, check sonatype and release the artifacts there at https://oss.sonatype.org/index.html#welcome), push it!
 
 ```
 git push origin ${SAKAI_VERSION}
