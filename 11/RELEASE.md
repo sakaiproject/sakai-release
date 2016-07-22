@@ -18,7 +18,7 @@ sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 cd ..
 
-mvn clean install -P pack-bin -Dmaven.test.skip=true
+mvn clean install -Ppack-bin -Dmaven.test.skip=true
 
 mvn deploy -Psakai-release -Dmaven.test.skip=true
 
