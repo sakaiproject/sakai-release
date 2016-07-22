@@ -20,7 +20,7 @@ cd ..
 
 mvn clean install -P pack-bin -Dmaven.test.skip=true
 
-mvn deploy -Dmaven.test.skip=true
+mvn deploy -Psakai-release -Dmaven.test.skip=true
 
 git commit -a -m "Releasing Sakai ${SAKAI_VERSION}"
 git tag -a ${SAKAI_VERSION} -m "Tagging Sakai version ${SAKAI_VERSION}"
