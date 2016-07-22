@@ -13,9 +13,9 @@ cd master
 sed -i -e "s/11-SNAPSHOT/${SAKAI_VERSION}/" pom.xml
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 
-mvn clean install -P pack-bin,pack-src
+mvn clean install -P pack-bin,pack-src -Dmaven.test.skip=true
 
-mvn mvn deploy -DaltDeploymentRepository=snapshot-repo::default
+mvn deploy -DaltDeploymentRepository=snapshot-repo::default -Dmaven.test.skip=true
 
 mvn -Dtag="${SAKAI_VERSION}" scm:tag
 ```
