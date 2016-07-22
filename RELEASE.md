@@ -9,9 +9,11 @@ git checkout 11.x
 # Now that you're in the 11 branch, setup the repo to release!
 
 cd master
-mvn versions:set -DnewVersion=${SAKAI_VERSION}
+#Fix the SNAPSHOT's in the properties first
+sed -i -e "s/11-SNAPSHOT/${SAKAI_VERSION}/" pom.xml
+mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 
-mvn clean install
+mvn clean install -P pack-bin,pack-src
 
 mvn mvn deploy -DaltDeploymentRepository=snapshot-repo::default
 
