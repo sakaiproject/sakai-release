@@ -13,7 +13,7 @@ cd master
 sed -i -e "s/11-SNAPSHOT/${SAKAI_VERSION}/" pom.xml
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 
-mvn clean install -P pack-bin,pack-src -Dmaven.test.skip=true
+mvn clean install -P pack-bin -Dmaven.test.skip=true
 
 mvn deploy -DaltDeploymentRepository=snapshot-repo::default -Dmaven.test.skip=true
 
