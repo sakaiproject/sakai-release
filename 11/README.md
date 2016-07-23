@@ -8,9 +8,9 @@ Sakai 11 scripts (forthcoming)
 When working on the actual source (not a fork)
 
 ```
-git co master
+git checkout master
 git pull upstream master (ensure your master working copy is updated)
-git co 11.x
+git checkout 11.x
 git pull upstream 11.x (ensure your 11.x working copy is updated)
 ```
 (Those steps are equivalent to get-cherry-picks.sh -u)
