@@ -19,10 +19,13 @@ sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
 cd ..
 
+#Build Sakai and the packs
 mvn clean install -Ppack-bin -Dmaven.test.skip=true
 
+#Release all the needed binaries to the repo
 mvn deploy -Dsakai-release=true -Dmaven.test.skip=true
 
+#Now do the necessary commits to git with the tag if everything's completed successfully so far
 git commit -a -m "Releasing Sakai ${SAKAI_VERSION}"
 git tag -a ${SAKAI_VERSION} -m "Tagging Sakai version ${SAKAI_VERSION}"
 
