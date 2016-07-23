@@ -57,14 +57,14 @@ First make the directory you'll need
 
 Then you can copy the files over
 
-`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:~/public_html/release/${SAKAI_RELEASE}/artifacts; cd ..`
+`cd pack ; find . -name "*sakai-*" | xargs -I {} scp {} sakaistatic:~/public_html/release/${SAKAI_VERSION}/artifacts; cd ..`
 
 Finally run this in the top level directory to generate and aggregate the java docs
 
 `mvn javadoc:aggregate`
 And then upload them to the release directory (Make sure it's empty)
 
-`rsync -r target/site/apidocs sakaistatic:~/public_html/release/${SAKAI_RELEASE}/`
+`rsync -r target/site/apidocs sakaistatic:~/public_html/release/${SAKAI_VERSION}/`
 
 
 * And that should be it! Close the Jira, check the release page for working links and send out the release notes! *
