@@ -53,7 +53,7 @@ Because this hits the server multiple times you might also want to use an app li
 
 First make the directory you'll need
 
-`ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_RELEASE}/artifacts"` 
+`ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_VERSION}/artifacts"` 
 
 Then you can copy the files over
 
