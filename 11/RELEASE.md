@@ -14,9 +14,10 @@ git checkout 11.x
 
 # Now that you're in the 11 branch, setup the repo to release!
 cd master
-#Fix the SNAPSHOT's in the properties first
-sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
+#First run the plugin to process and set the version
 mvn versions:set -DnewVersion=${SAKAI_VERSION} -DgenerateBackupPoms=false
+#Then fix up the SNAPSHOT in the properties
+sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
 cd ..
 
 #Build Sakai and the packs
