@@ -21,6 +21,10 @@ sed -i -e "s/${SAKAI_SNAPSHOT_VERSION}/${SAKAI_VERSION}/" pom.xml
 cd ..
 
 #Release all the needed binaries to the repo
+# The skipLocalStaging here is optional, and probably better to leave it off then it deploys all at the end
+# Also you might need -DstagingRepositoryId=orgsakaiproject-1059
+# Where the id is whatever id you've previously deployed into, if you're adding additional artifacts
+
 mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true
 
 #Build Sakai and the packs
