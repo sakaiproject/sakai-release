@@ -24,7 +24,7 @@ cd ..
 mvn clean install -Ppack-bin -Dmaven.test.skip=true
 
 #Release all the needed binaries to the repo
-mvn deploy -Dsakai-release=true -Dmaven.test.skip=true
+mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true
 
 #Now do the necessary commits to git with the tag if everything's completed successfully so far
 git commit -a -m "Releasing Sakai ${SAKAI_VERSION}"
