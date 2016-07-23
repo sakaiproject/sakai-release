@@ -6,8 +6,9 @@ export SAKAI_VERSION=11.0
 #This should be static
 export SAKAI_SNAPSHOT_VERSION=11-SNAPSHOT
 
-git clone git@github.com:sakaiproject/sakai.git
+git clone git@github.com:sakaiproject/sakai.git sakai-source-release
 # Or  git pull --rebase  if you're in an already existing directory
+cd sakai-source-release
 git fetch
 git checkout 11.x
 
