@@ -36,6 +36,8 @@ git tag -a ${SAKAI_VERSION} -m "Tagging Sakai version ${SAKAI_VERSION}"
 
 cd master
 mvn versions:set -DnewVersion=${SAKAI_SNAPSHOT_VERSION} -DgenerateBackupPoms=false
+#Then fix up the SNAPSHOT in the properties
+sed -i -e "s/${SAKAI_VERSION}/${SAKAI_SNAPSHOT_VERSION}/" pom.xml 
 git commit -a -m "Switching Sakai back to ${SAKAI_SNAPSHOT_VERSION}"
 ```
 
