@@ -1,4 +1,7 @@
 Work in Progress for doing the 11 release
+
+## Command line release in the git repository
+
 ```
 # I like to tmux before I do any of this so I can reattach to it later since this takes a long time, especially on the deploy
 tmux new -s release
@@ -45,7 +48,16 @@ sed -i -e "s/${SAKAI_VERSION}/${SAKAI_SNAPSHOT_VERSION}/" pom.xml
 git commit -a -m "Switching Sakai back to ${SAKAI_SNAPSHOT_VERSION}"
 ```
 
-Now if everythings okay (examine the git log, check sonatype and release the artifacts there at https://oss.sonatype.org/index.html#welcome), push it!
+## Checking sonatype and releasing artifacts
+
+Now if everythings okay (examine the git log, check sonatype close/release the artifacts there at https://oss.sonatype.org/index.html#welcome), push it!
+
+If for some reason closing the artifacts doesn't work (like maven it fails a rule) you can try to re-deploy to the same repository by using the -DstagingRepositoryId parameter like.
+```
+mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -DstagingRepositoryId=orgsakaiproject-1068
+```
+
+You can also delete and try again back on the deploy step.
 
 ```
 git push origin ${SAKAI_VERSION}
