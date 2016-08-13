@@ -52,7 +52,8 @@ git commit -a -m "Switching Sakai back to ${SAKAI_SNAPSHOT_VERSION}"
 
 Now if everythings okay (examine the git log, check sonatype close/release the artifacts there at https://oss.sonatype.org/index.html#welcome), push it!
 
-If for some reason closing the artifacts doesn't work (like maven it fails a rule) you can try to re-deploy to the same repository by using the -DstagingRepositoryId parameter like.
+If for some reason closing the artifacts doesn't work (like maven it fails a rule) you can try to re-deploy to the same repository by using the -DstagingRepositoryId parameter like below. Remember you might have to checkout the tag again to work on that, since you might be already at the SNAPSHOT phase.
+
 ```
 mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -DstagingRepositoryId=orgsakaiproject-1068
 ```
