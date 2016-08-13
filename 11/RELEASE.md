@@ -1,5 +1,8 @@
 Work in Progress for doing the 11 release
 ```
+# I like to tmux before I do any of this so I can reattach to it later since this takes a long time, especially on the deploy
+tmux new -s release
+
 # Change this each release
 export SAKAI_VERSION=11.0
 
@@ -24,6 +27,7 @@ cd ..
 # The skipLocalStaging here is optional, and probably better to leave it off then it deploys all at the end
 # Also you might need -DstagingRepositoryId=orgsakaiproject-1059
 # Where the id is whatever id you've previously deployed into, if you're adding additional artifacts
+
 
 mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true
 
