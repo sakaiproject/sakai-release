@@ -77,6 +77,7 @@ Because this hits the server multiple times you might also want to use an app li
 First clean up and make the directory you'll need
 
 `ssh sakaistatic "rm -rf ~/public_html/release/${SAKAI_VERSION}/artifacts ~/public_html/release/${SAKAI_VERSION}/apidocs"` 
+
 `ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_VERSION}/artifacts ~/public_html/release/${SAKAI_VERSION}/apidocs"` 
 
 Then you can copy the files over
