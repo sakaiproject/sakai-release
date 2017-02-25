@@ -74,9 +74,10 @@ You have to have an alias in .ssh/config to the sakai static release directory f
 
 Because this hits the server multiple times you might also want to use an app like keychain or ssh-agent.
 
-First make the directory you'll need
+First clean up and make the directory you'll need
 
-`ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_VERSION}/artifacts"` 
+`ssh sakaistatic "rm -rf ~/public_html/release/${SAKAI_VERSION}/artifacts ~/public_html/release/${SAKAI_VERSION}/apidocs"` 
+`ssh sakaistatic "mkdir -p ~/public_html/release/${SAKAI_VERSION}/artifacts ~/public_html/release/${SAKAI_VERSION}/apidocs"` 
 
 Then you can copy the files over
 
