@@ -1,7 +1,7 @@
 # sakai-release
 Tools for performing community releases of Sakai
 
-Sakai 11 scripts (forthcoming)
+Sakai 12 scripts (forthcoming)
 
 # Cherry picking tips
 
