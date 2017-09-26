@@ -83,11 +83,11 @@ var checkJiraApi = function(key,success) {
 	if (!jiralist[key]) {
 		jiralist[key] = { status:'', merge: '' }
 		remainingJiras++;
-		performRequest('jira.sakaiproject.org','/rest/api/2/issue/'+key,'GET',{fields:['status','customfield_11676']},function(data){
+		performRequest('jira.sakaiproject.org','/rest/api/2/issue/'+key,'GET',{fields:['status','customfield_12270']},function(data){
 			var status = 'none', merge = 'none';
 			if (!data.errorMessages) {
 				if (data.fields.status) status = data.fields.status.name;
-				if (data.fields.customfield_11676) merge = data.fields.customfield_11676.value;
+				if (data.fields.customfield_12270) merge = data.fields.customfield_12270.value;
 				jiralist[key].status = status;
 				jiralist[key].merge = merge;
 			} else {
@@ -142,7 +142,7 @@ var showLines = function(message,lines,ignore) {
 var processOptions = function(updated) {
 	if (program.find) {
 		console.log('Searching for commit \''+program.find+'\' in 12.x branch...')
-		exec((!updated?"git checkout 12.x;":"")+"git log --pretty=oneline --since=\"2016-02-17\"", function (error, stdout, stderr) {
+		exec((!updated?"git checkout 12.x;":"")+"git log --pretty=oneline --since=\"2017-08-29\"", function (error, stdout, stderr) {
 			var flines = processLines(stdout,function(t) { return t.indexOf(program.find) >= 0 });
 			if (flines.length==0) { console.log('Commit \''+program.find+'\' not found in 12.x branch!'); }
 			else {
