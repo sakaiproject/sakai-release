@@ -24,7 +24,7 @@ function performRequest(host, endpoint, method, data, success) {
     method: method,
     headers: headers
   };
-
+  
   var req = https.request(options, function(res) {
     res.setEncoding('utf-8');
     var responseString = '';
@@ -32,11 +32,11 @@ function performRequest(host, endpoint, method, data, success) {
       responseString += data;
     });
     res.on('end', function() {
-      var responseObject = JSON.parse(responseString);
-      success(responseObject);
-    });
+		var responseObject = JSON.parse(responseString);
+       	success(responseObject);
+	});
   });
-
+  
   req.write(dataString);
   req.end();
 }
@@ -82,7 +82,6 @@ var remainingJiras = 0;
 var checkJiraApi = function(key,success) {
 	if (!jiralist[key]) {
 		jiralist[key] = { status:'', merge: '' }
-		remainingJiras++;
 		performRequest('jira.sakaiproject.org','/rest/api/2/issue/'+key,'GET',{fields:['status','customfield_12270']},function(data){
 			var status = 'none', merge = 'none';
 			if (!data.errorMessages) {
@@ -94,19 +93,22 @@ var checkJiraApi = function(key,success) {
 				jiralist[key].status = 'unknown';
 				jiralist[key].merge = 'unknown';
 			}
-			remainingJiras--;
-			if (remainingJiras==0) {
+			remainingJiras++;
+			if (remainingJiras==globalNum) {
 				success(jiralist);
 			}
 		});
 	}
 }
 
+var globalNum = 0;
 var isJiraReady = function(t,f) {
 	var keys = extractJiraKeys(t);
 	for (var k=0; k<keys.length; k++) {
-		checkJiraApi(keys[k],f);
+		//checkJiraApi(keys[k],f);			
+		setTimeout(checkJiraApi,(500*globalNum)+(k*100),keys[k],f);
 	}
+	globalNum++;
 	return true;
 }
 
