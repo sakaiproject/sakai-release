@@ -32,7 +32,7 @@ cd ..
 # Where the id is whatever id you've previously deployed into, if you're adding additional artifacts
 # The -fae is because some artifacts may already have been deployed so we need to skip those
 
-mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -fae
+mvn deploy -P sonatype-oss-release -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -fae
 
 #Build Sakai and the packs
 mvn clean install -Ppack-bin -Dmaven.test.skip=true
