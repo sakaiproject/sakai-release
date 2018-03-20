@@ -108,5 +108,5 @@ These have only been run a few times, so hopefully they work for you. Will updat
 To deploy the local webjars we have currently these are just based off the sonatype parent. These will eventually be moved to the central webjars location.
 * Update the webjar version in both the master pom.xml and in the webjar pom.xml
 * Run this command to release the webjar in the webjar directory (like autosave), note the profile
-`mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -Psonatype-oss-release
+`mvn deploy -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -Psonatype-oss-release`
 * Do a commit to update the master and the local, push this as a PR to regular Sakai. It may fail the first Travis build, just rebuild
