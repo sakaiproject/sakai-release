@@ -71,7 +71,15 @@ git push origin 12.x
 
 Afterward you should generate the javadocs upload all of the artifacts.
 
-You have to have an alias in .ssh/config to the sakai static release directory for the command below to work. Otherwise set one up or have something comparable.
+You have to have an alias in .ssh/config to the sakai static release directory (currently on wush) for the command below to work. Otherwise set one up or have something comparable.
+
+First go over to wush and setup this directory, it was in `~/www/release/` so go there
+`cd ~/www/release/`
+
+Then copy the template over to the new directory
+`cp -r 0.0-template ${SAKAI_VERSION}`
+
+And you'll have to go into this template directory and modify the index.html to reference the new version. Now you can continue below.
 
 Because this hits the server multiple times you might also want to use an app like keychain or ssh-agent.
 
