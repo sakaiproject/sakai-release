@@ -79,7 +79,9 @@ First go over to wush and setup this directory, it was in `~/www/release/` so go
 Then copy the template over to the new directory
 `cp -r 0.0-template ${SAKAI_VERSION}`
 
-And you'll have to go into this template directory and modify the index.html to reference the new version. Now you can continue below.
+And you'll have to go into this template directory and modify the index.html to reference the new version. Now you can continue below. You can change them with vim using something like the command below (with whatever the version happens to be). Probably some other ways to do it as well in the future.
+
+`%s/0\.0/12\.3/g`
 
 Because this hits the server multiple times you might also want to use an app like keychain or ssh-agent.
 
