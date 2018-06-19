@@ -111,7 +111,7 @@ And then upload them to the release directory (Make sure it's empty)
 And checkout 12.x again
 `git checkout 12.x`
 
-* And that should be it! Close the Jira, check the release page for working links and send out the release notes! *
+* And that should be it! Check the release page for working links and the rest of the process and send out the release notes! *
 
 These have only been run a few times, so hopefully they work for you. Will update this next release cycle!
 
