@@ -13,9 +13,9 @@ export SAKAI_VERSION=12.0
 export SAKAI_SNAPSHOT_VERSION=12-SNAPSHOT
 
 git clone git@github.com:sakaiproject/sakai.git sakai-source-release
-# Or  git pull --rebase  if you're in an already existing directory
 cd sakai-source-release
 git fetch
+# Or  git pull --rebase  if you're in an already existing directory
 git checkout 12.x
 
 # Now that you're in the 12 branch, setup the repo to release!
