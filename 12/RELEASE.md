@@ -16,6 +16,7 @@ git clone git@github.com:sakaiproject/sakai.git sakai-source-release
 cd sakai-source-release
 git fetch
 # Or  git pull --rebase  if you're in an already existing directory
+# If existing also run   git clean -f -d
 git checkout 12.x
 
 # Now that you're in the 12 branch, setup the repo to release!
