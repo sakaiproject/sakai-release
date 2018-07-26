@@ -31,7 +31,8 @@ cd ..
 # The skipLocalStaging here is optional, and probably better to leave it off then it deploys all at the end
 # Also you might need -DstagingRepositoryId=orgsakaiproject-1059
 # Where the id is whatever id you've previously deployed into, if you're adding additional artifacts
-# The -fae is because some artifacts may already have been deployed so we need to skip those
+
+# The -fae is because some artifacts may already have been deployed (like webjars) so we need to skip those. They will fail at the end.
 
 mvn deploy -P sonatype-oss-release -Dsakai-release=true -Dmaven.test.skip=true -DskipLocalStaging=true -fae
 
