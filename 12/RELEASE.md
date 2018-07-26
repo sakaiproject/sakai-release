@@ -84,7 +84,10 @@ Then copy the template over to the new directory
 And you'll have to go into this template directory and modify the index.html to reference the new version. Now you can continue below. You can change them with vim using something like the command below (with whatever the version happens to be). Probably some other ways to do it as well in the future.
 
 `%s/0\.0/12\.3/g`
+
 `%s/0\.x/12\.x/g`
+
+Also remember to update the date in this file.
 
 Because this hits the server multiple times you might also want to use an app like keychain or ssh-agent.
 
